@@ -155,7 +155,7 @@ nav a#toggle-btn {
         top: 20px;
     }
 
-    nav a#toggle-btn{
+    nav a#toggle-btn {
         display: block;
         background: #282627;
         color: #8d8273;
@@ -163,12 +163,13 @@ nav a#toggle-btn {
         position: relative;
     }
 
-    .menu:before, .menu:after {
+    .menu:before,
+    .menu:after {
         content: "";
         display: table;
     }
 
-    .menu:after{
+    .menu:after {
         clear: both;
     }
 
@@ -180,7 +181,7 @@ nav a#toggle-btn {
 
 /* landing-page content */
 
-.section-hero{
+.section-hero {
     width: 100%;
     height: 100vh;
     margin: 0;
@@ -188,32 +189,32 @@ nav a#toggle-btn {
     overflow-y: hidden;
 }
 
-.section-hero .container{
+.section-hero .container {
     margin-top: 34vh;
 }
 
-.section-hero h2{
+.section-hero h2 {
     color: #8d8273;
 }
 
 @media screen and (max-width: 580px) {
-    .section-hero h2{
+    .section-hero h2 {
         font-size: 24px;
     }
 
-    .section-hero p{
+    .section-hero p {
         display: none;
     }
 }
 
 /* overview */
 
-#overview{
+#overview {
     background: #282627;
     padding: 8rem 0;
 }
 
-.overview-content{
+.overview-content {
     display: grid;
     grid-gap: 80px;
     grid-template-columns: repeat(2, 1fr);
@@ -221,7 +222,7 @@ nav a#toggle-btn {
 }
 
 @media screen and (max-width: 580px) {
-    .overview-content{
+    .overview-content {
         display: grid;
         grid-gap: 20px;
         grid-template-columns: repeat(1, 1fr);
@@ -231,11 +232,11 @@ nav a#toggle-btn {
 
 /* about section */
 
-#about{
+#about {
     padding: 8rem 0;
 }
 
-#about h2{
+#about h2 {
     text-transform: uppercase;
     font-weight: 800;
     font-size: 14px;
@@ -246,12 +247,12 @@ nav a#toggle-btn {
 
 /* partners */
 
-#partners{
+#partners {
     background: #282627;
     padding: 8em 0;
 }
 
-.partners-content{
+.partners-content {
     display: grid;
     grid-gap: 80px;
     grid-template-columns: repeat(2, 1fr);
@@ -259,7 +260,7 @@ nav a#toggle-btn {
 }
 
 @media screen and (max-width: 580px) {
-    .partners-content{
+    .partners-content {
         display: grid;
         grid-gap: 20px;
         grid-template-columns: repeat(1, 1fr);
@@ -269,16 +270,16 @@ nav a#toggle-btn {
 
 /* contact section */
 
-#contact{
+#contact {
     background: #490001;
     padding: 8em 0;
 }
 
-#contact h2{
+#contact h2 {
     color: #8d8273;
 }
 
-#contact input{
+#contact input {
     width: 80%;
     margin: 2em 0;
     background: none;
@@ -289,12 +290,12 @@ nav a#toggle-btn {
     color: rgba(211, 165, 100);
 }
 
-#contact input:focus{
+#contact input:focus {
     border: none;
     border: 2px solid #8d8273;
 }
 
-input::placeholder{
+input::placeholder {
     color: #8d8273;
     text-transform: uppercase;
     font-weight: 400;
