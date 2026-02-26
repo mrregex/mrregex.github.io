@@ -1,150 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Wein&Gut</title>
+    <title>mrregex | Portfolio</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Fira+Code&display=swap" rel="stylesheet">
 
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i, 300, 300i,400,400i,500,500i,700,700i,900,900i"
-        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <style>
+        :root {
+        var(--primary-color): #00ffcc;
+        var(--glitch-color-1): #ff003c; /* Cyberpunk Red/Magenta */
+        var(--glitch-color-2): #00e6ff; /* Cyan */
+            --bg-color: #080808;
+            --text-color: #ffffff;
+        }
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
-        crossorigin="anonymous">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            overflow: hidden;
+            font-family: 'Fira Code', monospace;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            position: relative; /* Needed for the scanline overlay */
+        }
 
+        /* --- Scanline Overlay --- */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            /* Creates the horizontal lines */
+            background: linear-gradient(
+                    to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.25) 50%,
+                    rgba(0, 0, 0, 0.25)
+            );
+            background-size: 100% 4px; /* Adjust '4px' for thicker/thinner lines */
+            pointer-events: none; /* Allows you to click links right through it */
+            z-index: 10; /* Sits on top of the text and canvas */
+        }
 
+        #circuit-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        h1 {
+            position: relative;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 5rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow:
+                    3px 3px 0px rgba(0, 255, 204, 0.6),
+                    -2px -2px 0px rgba(255, 0, 60, 0.6);
+            user-select: none;
+        }
+
+        /* Glitch Effect Pseudo-elements */
+        h1::before, h1::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            color: #ffffff;
+        }
+
+        h1::before {
+            left: 3px;
+            text-shadow: -2px 0 var(--glitch-color-1);
+            animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+        }
+
+        h1::after {
+            left: -3px;
+            text-shadow: -2px 0 var(--glitch-color-2);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip-path: inset(20% 0 80% 0); }
+            20% { clip-path: inset(60% 0 10% 0); }
+            40% { clip-path: inset(40% 0 50% 0); }
+            60% { clip-path: inset(80% 0 5% 0); }
+            80% { clip-path: inset(10% 0 70% 0); }
+            100% { clip-path: inset(30% 0 20% 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip-path: inset(10% 0 60% 0); }
+            20% { clip-path: inset(30% 0 20% 0); }
+            40% { clip-path: inset(70% 0 10% 0); }
+            60% { clip-path: inset(20% 0 50% 0); }
+            80% { clip-path: inset(90% 0 5% 0); }
+            100% { clip-path: inset(50% 0 30% 0); }
+        }
+
+        .social-links {
+            pointer-events: auto;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .social-links a {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 2.2rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative; /* Ensure it stays clickable under scanlines */
+            z-index: 15;
+        }
+
+        .social-links a:hover {
+            color: #00ffcc;
+            transform: translateY(-5px) scale(1.1);
+            text-shadow: 0 0 10px #00ffcc;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 3rem; }
+            .social-links { gap: 30px; }
+            .social-links a { font-size: 1.8rem; }
+        }
+    </style>
 </head>
-
 <body>
 
-    <header>
-        <nav class="menu">
-            <ul class="menu">
-                <li>
-                    <a href="#home">Home</a>
-                </li>
-                <li>
-                    <a href="#overview">Overview</a>
-                </li>
-                <li>
-                    <a href="#about">About</a>
-                </li>
-                <li>
-                    <a href="#partners">Partners</a>
-                </li>
-                <li>
-                    <a href="#contact">Contact</a>
-                </li>
-                <li>
-                    <a href="#shop">Shop</a>
-                </li>
+<canvas id="circuit-canvas"></canvas>
 
-            </ul>
-            <a href="#" id="toggle-btn">Wein&Gut</a>
-        </nav>
-    </header>
-
-    <!-- content -->
-
-    <a name="home"></a>
-    <div class="section-hero">
-        <div class="container">
-            <h1>Wein&Gut</h1>
-            <h2><i class="fa fa-wine-bottle" aria-hidden="true">Shop your wine.</i></h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut, beatae id adipisci ducimus illo ab sit
-                magni aliquid debitis molestias provident quaerat dolorem excepturi ullam similique minima, temporibus,
-                dolor delectus.</p>
-        </div>
+<main class="content-wrapper">
+    <h1 data-text="mrregex">mrregex</h1>
+    <div class="social-links">
+        <a href="https://github.com/mrregex" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <i class="fab fa-github"></i>
+        </a>
+        <a href="https://linkedin.com/in/nikolaushorn" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="https://steamcommunity.com/id/mrregex" target="_blank" rel="noopener noreferrer" aria-label="Steam">
+            <i class="fab fa-steam"></i>
+        </a>
     </div>
+</main>
 
-    <!-- overview-section -->
+<script>
+    const canvas = document.getElementById('circuit-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
 
-    <a name="overview"></a>
-    <div class="section" id="overview">
-        <div class="container">
-            <div class="overview-content">
-                <div>
-                    <h2>Overview</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus fuga ipsa quod, quia
-                        doloremque ipsum itaque voluptatibus consectetur. Error reiciendis illum asperiores aliquid
-                        corrupti earum iusto excepturi perferendis ad voluptas.</p>
-                    <button type="button">View More</button>
-                </div>
+    const GRID_SIZE = 30;
+    const PATH_COUNT = 150;
+    const BASE_SPEED = 0.8;
 
-                <div>
-                    <img src="images/pexels-photo-95960.jpeg" alt="">
-                </div>
+    const TRACE_COLOR = 'rgba(0, 255, 204, 0.08)';
+    const ELECTRON_COLOR = '#00ffcc';
 
-            </div>
-        </div>
-    </div>
+    const paths = [];
+    const electrons = [];
 
-    <!-- about section -->
+    const directions = [
+        {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1},
+        {x: -1, y: 0}, {x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}
+    ];
 
-    <a name="about"></a>
-    <div class="section" id="about">
-        <div class="container">
-            <h2>
-                <i class="fa fa-wine-bottle">Wein&Gut</i>
-            </h2>
-            <h3>Shop your wine.</h3>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe autem amet molestias tempora dicta atque
-                doloribus repudiandae. Architecto ipsum commodi ipsam maxime, rem ducimus dolorem labore eius eaque,
-                quidem deserunt.</p>
-            <img src="images/about.jpg" alt="">
-        </div>
-    </div>
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        generateCircuit();
+    }
+    window.addEventListener('resize', () => {
+        clearTimeout(window.resizeTimer);
+        window.resizeTimer = setTimeout(resize, 200);
+    });
 
-    <a name="partners"></a>
-    <div id="partners" class="section">
-        <div class="container">
-            <div class="partners-content">
-                <div>
-                    <img src="images/features.jpg" alt="">
-                </div>
-                <div>
-                    <h2>Partners</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cupiditate animi eius molestiae
-                        placeat aliquam!</p>
-                    <h4>&#10148; Partner1</h4>
-                    <p>Architecto ipsum commodi ipsam maxime, rem ducimus dolorem labore eius eaque,
-                        quidem deserunt.</p>
-                    <h4>&#10148; Partner2</h4>
-                    <p>Architecto ipsum commodi ipsam maxime, rem ducimus dolorem labore eius eaque,
-                        quidem deserunt.</p>
-                    <h4>&#10148; Partner3</h4>
-                    <p>Architecto ipsum commodi ipsam maxime, rem ducimus dolorem labore eius eaque,
-                        quidem deserunt.</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    function generateCircuit() {
+        paths.length = 0;
+        electrons.length = 0;
 
-    <a name="contact"></a>
-    <div class="section" id="contact">
-        <div class="container">
-            <h2>Contact us.</h2>
-            <p>
-                <div id="maps"><iframe width="80%" height="400px;" src="https://maps.google.com/maps?width=700&amp;height=440&amp;hl=en&amp;q=Kirchgasse%207%2C%20Scheifling+(Wein%26Gut)&amp;ie=UTF8&amp;t=&amp;z=10&amp;iwloc=B&amp;output=embed"
-                        frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
-                    <style>#gmap_canvas img{max-width:none!important;background:none!important}</style>
-                </div><br />
-            </p>
-            <input type="text" placeholder="enter your email">
-            <br>
-            <button type="button">Notify me</button>
-        </div>
-    </div>
+        for (let i = 0; i < PATH_COUNT; i++) {
+            let startX = Math.floor(Math.random() * (width / GRID_SIZE)) * GRID_SIZE;
+            let startY = Math.floor(Math.random() * (height / GRID_SIZE)) * GRID_SIZE;
 
+            let points = [{x: startX, y: startY}];
+            let segments = Math.floor(Math.random() * 5) + 3;
+            let currentDir = Math.floor(Math.random() * 8);
 
+            let cx = startX;
+            let cy = startY;
+            let totalLength = 0;
 
-    <script src="js/script.js"></script>
+            for (let j = 0; j < segments; j++) {
+                let length = (Math.floor(Math.random() * 3) + 1) * GRID_SIZE;
+
+                cx += directions[currentDir].x * length;
+                cy += directions[currentDir].y * length;
+                points.push({x: cx, y: cy});
+
+                let dx = points[j+1].x - points[j].x;
+                let dy = points[j+1].y - points[j].y;
+                totalLength += Math.sqrt(dx * dx + dy * dy);
+
+                let turn = Math.random() < 0.5 ? 1 : 2;
+                turn *= Math.random() < 0.5 ? 1 : -1;
+                currentDir = (currentDir + turn + 8) % 8;
+            }
+
+            paths.push({points, totalLength});
+
+            let electronCount = Math.floor(Math.random() * 2) + 1;
+            for(let k = 0; k < electronCount; k++) {
+                electrons.push({
+                    pathIndex: paths.length - 1,
+                    progress: Math.random() * totalLength,
+                    speed: Math.random() * BASE_SPEED + (BASE_SPEED * 0.5)
+                });
+            }
+        }
+    }
+
+    function draw() {
+        ctx.fillStyle = 'rgba(8, 8, 8, 0.3)';
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = TRACE_COLOR;
+        ctx.beginPath();
+        paths.forEach(p => {
+            ctx.moveTo(p.points[0].x, p.points[0].y);
+            for(let i = 1; i < p.points.length; i++) {
+                ctx.lineTo(p.points[i].x, p.points[i].y);
+            }
+        });
+        ctx.stroke();
+
+        electrons.forEach(e => {
+            const path = paths[e.pathIndex];
+            e.progress += e.speed;
+
+            if(e.progress > path.totalLength) {
+                e.progress = 0;
+            }
+
+            let dist = 0;
+            for(let i = 0; i < path.points.length - 1; i++) {
+                let pt1 = path.points[i];
+                let pt2 = path.points[i+1];
+                let dx = pt2.x - pt1.x;
+                let dy = pt2.y - pt1.y;
+                let segLen = Math.sqrt(dx * dx + dy * dy);
+
+                if(dist + segLen >= e.progress) {
+                    let ratio = (e.progress - dist) / segLen;
+                    let ex = pt1.x + dx * ratio;
+                    let ey = pt1.y + dy * ratio;
+
+                    ctx.beginPath();
+                    ctx.arc(ex, ey, 1.5, 0, Math.PI * 2);
+                    ctx.fillStyle = ELECTRON_COLOR;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = ELECTRON_COLOR;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    break;
+                }
+                dist += segLen;
+            }
+        });
+
+        requestAnimationFrame(draw);
+    }
+
+    resize();
+    draw();
+</script>
 </body>
-
 </html>
